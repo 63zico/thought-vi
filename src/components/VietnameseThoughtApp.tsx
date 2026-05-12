@@ -692,22 +692,18 @@ function ResultView(props: {
           <div className="mt-3 space-y-3">
             {props.result.tone_variants.map((variant) => (
               <div key={variant.tone} className="rounded-2xl bg-ink/70 p-3">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-black text-cyanline">{variant.label_ko}</p>
-                    <p className="mt-2 text-lg font-black">{variant.vietnamese}</p>
-                    <p className="mt-1 text-sm text-mist">{variant.pronunciation}</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => props.onSpeak(variant.vietnamese)}
-                    className="focus-ring flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-cyanline"
-                    aria-label={`${variant.label_ko} 듣기`}
-                  >
-                    <Volume2 size={18} />
-                  </button>
-                </div>
+                <p className="text-xs font-black text-cyanline">{variant.label_ko}</p>
+                <p className="mt-2 text-lg font-black">{variant.vietnamese}</p>
+                <p className="mt-1 text-sm text-mist">발음: {variant.pronunciation}</p>
                 <p className="mt-2 text-sm leading-relaxed">{variant.nuance_ko}</p>
+                <button
+                  type="button"
+                  onClick={() => props.onSpeak(variant.vietnamese)}
+                  className="focus-ring mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-cyanline/10 text-sm font-black text-cyanline"
+                >
+                  <Volume2 size={18} />
+                  이 스타일로 듣기
+                </button>
               </div>
             ))}
           </div>

@@ -18,7 +18,7 @@ JSON shape:
       "tone": "basic_male | romantic_male | rapper_male",
       "label_ko": "Korean label for this tone",
       "vietnamese": "Vietnamese sentence in this tone",
-      "pronunciation": "Hangul-only Korean approximation",
+      "pronunciation": "Hangul-only Korean approximation for THIS variant's Vietnamese sentence",
       "nuance_ko": "Korean nuance explanation"
     }
   ],
@@ -42,6 +42,7 @@ Always return exactly 3 tone_variants:
 - rapper_male: 래퍼 남자 스타일. Rhythmic, confident, punchy spoken Vietnamese. Do not write lyrics, do not mention a real artist, and keep it usable in real conversation.
 Pronunciation rules:
 - The pronunciation field MUST be written in Hangul, not Vietnamese romanization.
+- Every tone_variants item MUST also include its own Hangul pronunciation for that exact variant sentence.
 - Approximate Vietnamese tones for Korean speakers with natural readable Hangul.
 - Example: "Anh yêu em" -> "아잉 이우 엠", not "Anh yêu em".
 - Example: "Cảm ơn anh" -> "깜 언 아잉", not "Cảm ơn anh".
