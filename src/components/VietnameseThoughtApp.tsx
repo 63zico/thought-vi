@@ -251,7 +251,9 @@ export default function VietnameseThoughtApp() {
         body: JSON.stringify({ ...result, difficulty: "normal" })
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error ?? "저장에 실패했습니다.");
+      if (!response.ok) {
+        throw new Error(data.detail ? `${data.error}: ${data.detail}` : data.error ?? "저장에 실패했습니다.");
+      }
       setSavedCardId(data.id);
       await refreshCards();
     } catch (err) {

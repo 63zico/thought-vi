@@ -12,8 +12,12 @@ import type {
 } from "@/types/card";
 import { addMinutes, calculateNextReview } from "@/lib/review";
 
-const supabaseUrl = process.env.SUPABASE_URL;
+const rawSupabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = rawSupabaseUrl
+  ?.trim()
+  .replace(/\/rest\/v1\/?$/, "")
+  .replace(/\/$/, "");
 const useSupabase = Boolean(supabaseUrl && supabaseKey);
 
 const dbPath = process.env.DATABASE_PATH ?? "./data/cards.db";
@@ -172,7 +176,16 @@ async function supabaseRequest<T>(pathAndQuery: string, init: RequestInit = {}) 
     throw new Error("Supabase 환경변수가 설정되어 있지 않습니다.");
   }
 
-  const response = await fetch(`${supabaseUrl}/rest/v1/${pathAndQuery}`, {
+  let url: URL;
+  try {
+    url = new URL(`/rest/v1/${pathAndQuery}`, supabaseUrl);
+  } catch {
+    throw new Error(
+      "SUPABASE_URL 형식이 올바르지 않습니다. 예: https://xxxxx.supabase.co"
+    );
+  }
+
+  const response = await fetch(url.toString(), {
     ...init,
     headers: {
       apikey: supabaseKey,
