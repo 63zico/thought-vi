@@ -140,6 +140,7 @@ export default function VietnameseThoughtApp() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [quizMode, setQuizMode] = useState<QuizMode>("ko-to-vi");
   const [convertedToday, setConvertedToday] = useState(0);
+  const [vietnameseVoice, setVietnameseVoice] = useState<SpeechSynthesisVoice | null>(null);
 
   const tags = fixedFilters;
 
@@ -163,8 +164,9 @@ export default function VietnameseThoughtApp() {
     (sum, card) => sum + (isToday(card.last_used_at) ? Math.max(1, card.used_count) : 0),
     0
   );
-  const thoughtRate = convertedToday
-    ? Math.min(100, Math.round((newToday / convertedToday) * 100))
+  const visibleConvertedToday = Math.max(convertedToday, newToday);
+  const cardSaveRate = visibleConvertedToday
+    ? Math.min(100, Math.round((newToday / visibleConvertedToday) * 100))
     : 0;
   const currentReview = dueCards[reviewIndex] ?? null;
   const blankQuiz = currentReview ? makeBlank(currentReview.vietnamese) : null;
@@ -205,6 +207,27 @@ export default function VietnameseThoughtApp() {
     // Zalo WebView may inject the SDK after hydration. Keep access client-only
     // and do not initialize it because this app does not depend on Zalo APIs.
     void window.zaloJSV2;
+  }, [mounted]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    if (!("speechSynthesis" in window)) return;
+
+    const pickVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const viVoice =
+        voices.find((voice) => voice.lang.toLowerCase() === "vi-vn") ??
+        voices.find((voice) => voice.lang.toLowerCase().startsWith("vi")) ??
+        null;
+      setVietnameseVoice(viVoice);
+    };
+
+    pickVoice();
+    window.speechSynthesis.onvoiceschanged = pickVoice;
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
   }, [mounted]);
 
   async function translate() {
@@ -300,7 +323,13 @@ export default function VietnameseThoughtApp() {
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "vi-VN";
-    utterance.rate = 0.88;
+    if (vietnameseVoice) {
+      utterance.voice = vietnameseVoice;
+      utterance.lang = vietnameseVoice.lang;
+    }
+    utterance.rate = 0.96;
+    utterance.pitch = 1;
+    utterance.volume = 1;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   }
@@ -420,10 +449,10 @@ export default function VietnameseThoughtApp() {
               setKorean={setKorean}
               loading={loading}
               isListening={isListening}
-              convertedToday={convertedToday}
+              convertedToday={visibleConvertedToday}
               newToday={newToday}
               usedToday={usedToday}
-              thoughtRate={thoughtRate}
+              thoughtRate={cardSaveRate}
               obsessionCount={obsessionCount}
               onListen={listen}
               onTranslate={translate}
@@ -522,7 +551,7 @@ function HomeView(props: {
           <StatTile label="변환" value={`${props.convertedToday}`} />
           <StatTile label="새 문장" value={`${props.newToday}`} />
           <StatTile label="실제 사용" value={`${props.usedToday}`} />
-          <StatTile label="베트남어 사고율" value={`${props.thoughtRate}%`} hot />
+          <StatTile label="카드화율" value={`${props.thoughtRate}%`} hot />
         </div>
       </div>
 
