@@ -13,9 +13,9 @@ import type {
 import { addMinutes, calculateNextReview } from "@/lib/review";
 
 const rawSupabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.replace(/\s+/g, "");
 const supabaseUrl = rawSupabaseUrl
-  ?.trim()
+  ?.replace(/\s+/g, "")
   .replace(/\/rest\/v1\/?$/, "")
   .replace(/\/$/, "");
 const useSupabase = Boolean(supabaseUrl && supabaseKey);
