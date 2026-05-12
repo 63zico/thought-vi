@@ -12,7 +12,7 @@ export const wordBreakdownSchema = z.object({
 export const emotionSchema = z.enum(["angry", "funny", "stressful", "exciting", "neutral"]);
 
 export const toneVariantSchema = z.object({
-  tone: z.enum(["soft", "boss", "close", "angry"]),
+  tone: z.enum(["basic_male", "romantic_male", "rapper_male"]),
   label_ko: z.string().min(1),
   vietnamese: z.string().min(1),
   pronunciation: z.string().min(1),

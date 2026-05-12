@@ -12,7 +12,7 @@ export type WordBreakdown = {
 };
 
 export type ToneVariant = {
-  tone: "soft" | "boss" | "close" | "angry";
+  tone: "basic_male" | "romantic_male" | "rapper_male";
   label_ko: string;
   vietnamese: string;
   pronunciation: string;

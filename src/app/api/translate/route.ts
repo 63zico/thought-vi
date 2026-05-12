@@ -15,7 +15,7 @@ JSON shape:
   "emotion": "angry | funny | stressful | exciting | neutral",
   "tone_variants": [
     {
-      "tone": "soft | boss | close | angry",
+      "tone": "basic_male | romantic_male | rapper_male",
       "label_ko": "Korean label for this tone",
       "vietnamese": "Vietnamese sentence in this tone",
       "pronunciation": "Hangul-only Korean approximation",
@@ -36,11 +36,10 @@ JSON shape:
 
 Tags should usually be one of: 주방, 직원관리, 업체협상, 손님응대, 연애, 생활. Use another short Korean tag only if clearly better.
 Emotion should capture the feeling behind the Korean thought, not just the topic.
-Always return exactly 4 tone_variants:
-- soft: 부드러운 버전
-- boss: 사장님 버전
-- close: 친한 버전
-- angry: 화난 버전
+Always return exactly 3 tone_variants:
+- basic_male: 기본 남자 스타일. Natural, direct, masculine, everyday spoken Vietnamese.
+- romantic_male: 로맨틱한 남자 스타일. Warm, affectionate, charming, but still natural.
+- rapper_male: 래퍼 남자 스타일. Rhythmic, confident, punchy spoken Vietnamese. Do not write lyrics, do not mention a real artist, and keep it usable in real conversation.
 Pronunciation rules:
 - The pronunciation field MUST be written in Hangul, not Vietnamese romanization.
 - Approximate Vietnamese tones for Korean speakers with natural readable Hangul.
