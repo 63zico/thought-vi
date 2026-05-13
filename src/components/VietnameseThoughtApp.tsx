@@ -286,6 +286,14 @@ export default function VietnameseThoughtApp() {
     }
   }
 
+  function startNewThought() {
+    setKorean("");
+    setResult(null);
+    setSavedCardId(null);
+    setError("");
+    setView("home");
+  }
+
   function listen() {
     if (!window.isSecureContext) {
       setError("폰에서 마이크를 쓰려면 HTTPS 주소가 필요합니다. localhost에서는 되지만, http://192... 로 접속하면 브라우저가 음성 입력을 막을 수 있습니다.");
@@ -466,6 +474,7 @@ export default function VietnameseThoughtApp() {
               saving={saving}
               onSave={saveCard}
               onSpeak={speak}
+              onNewInput={startNewThought}
             />
           ) : null}
 
@@ -630,6 +639,7 @@ function ResultView(props: {
   saving: boolean;
   onSave: () => void;
   onSpeak: (text: string) => void;
+  onNewInput: () => void;
 }) {
   return (
     <div className="space-y-4 pt-4">
@@ -718,6 +728,13 @@ function ResultView(props: {
       >
         {props.saved ? <Check size={20} /> : props.saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
         {props.saved ? "저장됨" : "카드 저장"}
+      </button>
+      <button
+        type="button"
+        onClick={props.onNewInput}
+        className="focus-ring flex h-12 w-full items-center justify-center rounded-2xl bg-white/10 text-sm font-black text-cyanline"
+      >
+        새 문장 입력
       </button>
     </div>
   );
